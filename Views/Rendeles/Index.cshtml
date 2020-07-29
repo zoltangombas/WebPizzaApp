@@ -28,6 +28,9 @@
             <th>
                 Cím
             </th>
+            <th>
+                Pizzák
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -49,6 +52,20 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Cim.Irsz) @Html.DisplayFor(modelItem => item.Cim.Utca) @Html.DisplayFor(modelItem => item.Cim.Hazszam)
+                </td>
+                <td>
+                    <table>
+                        <tbody>
+                            @foreach (var litem in item.PizzaRendelesek)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => litem.Pizza.Nev)
+                                    </td>
+                                </tr>
+                             }
+                        </tbody>
+                    </table>
                 </td>
                 <td>
                     <a asp-action="Index" asp-route-id="@item.CimId">Státusz váltás</a>

@@ -22,7 +22,9 @@ namespace WebPizzaApp.Controllers
             var webPizzaAppDbContext = _context.Rendelesek.Include(r => r.Allapot)
                 .Include(r => r.Futar)
                 .Include(r => r.Cim)
-                .Include(r => r.Cim.Megrendelo);
+                .Include(r => r.Cim.Megrendelo)
+                .Include(r => r.PizzaRendelesek)
+                .ThenInclude(r => r.Pizza);
             return View(await webPizzaAppDbContext.ToListAsync());
         }
     }
