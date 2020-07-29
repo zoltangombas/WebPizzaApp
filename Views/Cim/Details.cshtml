@@ -1,0 +1,54 @@
+﻿@model WebPizzaApp.Data.Cim
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Cim</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Irsz)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Irsz)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Varos)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Varos)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Utca)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Utca)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Hazszam)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Hazszam)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Csengo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Csengo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Megrendelo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Megrendelo.Nev)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CimId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

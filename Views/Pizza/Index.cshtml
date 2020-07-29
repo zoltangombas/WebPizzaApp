@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WebPizzaApp.Data.Pizza>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Új pizza felvitele</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nev)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nev)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PizzaId">Szerkeszt</a> |
+                <a asp-action="Details" asp-route-id="@item.PizzaId">Részletek</a> |
+                <a asp-action="Delete" asp-route-id="@item.PizzaId">Törlés</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

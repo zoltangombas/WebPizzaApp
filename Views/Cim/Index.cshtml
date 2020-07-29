@@ -1,0 +1,65 @@
+﻿@model IEnumerable<WebPizzaApp.Data.Cim>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Új cím felvitele</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Irsz)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Varos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Utca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hazszam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Csengo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Megrendelo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Irsz)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Varos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Utca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hazszam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Csengo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Megrendelo.Nev)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CimId">Szerkeszt</a> |
+                <a asp-action="Details" asp-route-id="@item.CimId">Részletek</a> |
+                <a asp-action="Delete" asp-route-id="@item.CimId">Törlés</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
