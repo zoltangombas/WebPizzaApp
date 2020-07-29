@@ -14,10 +14,10 @@ namespace WebPizzaApp.Data
 		public int AllapotId { get; set; }
 		public Allapot Allapot { get; set; }
 
-		public int FutarId { get; set; }
+		public int? FutarId { get; set; }
 		public Futar Futar { get; set; }
 
-		public int CimId { get; set; }
+		public int? CimId { get; set; }
 		public Cim Cim { get; set; }
 
 		public virtual IList<PizzaRendeles> PizzaRendelesek { get; set; }
