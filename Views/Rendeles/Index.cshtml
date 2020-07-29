@@ -1,0 +1,58 @@
+﻿@model IEnumerable<WebPizzaApp.Data.Rendeles>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+        <a asp-action="Index">Rendelés felvitele</a>
+</p>
+<h1>Aktív rendelések</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Rendelés szám
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Allapot.Megnevezes)
+            </th>
+            <th>
+                Futár
+            </th>
+            <th>
+                Megrendelő
+            </th>
+            <th>
+                Cím
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RendelesId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AllapotId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FutarId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CimId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CimId)
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
