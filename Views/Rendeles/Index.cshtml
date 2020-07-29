@@ -39,18 +39,19 @@
                     @Html.DisplayFor(modelItem => item.RendelesId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AllapotId)
+                    @Html.DisplayFor(modelItem => item.Allapot.Megnevezes)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FutarId)
+                    @Html.DisplayFor(modelItem => item.Futar.Nev)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CimId)
+                    @Html.DisplayFor(modelItem => item.Cim.Megrendelo.Nev)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CimId)
+                    @Html.DisplayFor(modelItem => item.Cim.Irsz) @Html.DisplayFor(modelItem => item.Cim.Utca) @Html.DisplayFor(modelItem => item.Cim.Hazszam)
                 </td>
                 <td>
+                    <a asp-action="Index" asp-route-id="@item.CimId">Státusz váltás</a>
                 </td>
             </tr>
         }

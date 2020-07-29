@@ -29,7 +29,7 @@ namespace WebPizzaApp.Migrations
             migrationBuilder.Sql("INSERT INTO Cimek VALUES ('3333' , 'Budapest' , 'István út.' , '110' , '3' , 3)");
 
             migrationBuilder.Sql("INSERT INTO Rendelesek  VALUES (1,1,1)");
-            migrationBuilder.Sql("INSERT INTO Rendelesek  VALUES (1,1,1)");
+            migrationBuilder.Sql("INSERT INTO Rendelesek  VALUES (1,1,2)");
 
             migrationBuilder.Sql("INSERT INTO PizzaRendelesek  VALUES (1,1)");
             migrationBuilder.Sql("INSERT INTO PizzaRendelesek  VALUES (2,2)");

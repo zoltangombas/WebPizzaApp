@@ -19,7 +19,11 @@ namespace WebPizzaApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Rendelesek.ToListAsync());
+            var webPizzaAppDbContext = _context.Rendelesek.Include(r => r.Allapot)
+                .Include(r => r.Futar)
+                .Include(r => r.Cim)
+                .Include(r => r.Cim.Megrendelo);
+            return View(await webPizzaAppDbContext.ToListAsync());
         }
     }
 }
