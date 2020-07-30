@@ -6,6 +6,16 @@
 
 <h1>Index</h1>
 
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Szűkítés: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Szűkít" class="btn btn-default" /> |
+            <a asp-action="Index">Vissza</a>
+        </p>
+    </div>
+</form>
+
 <p>
     <a asp-action="Create">Új megrendelő felvitele</a>
 </p>

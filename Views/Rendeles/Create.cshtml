@@ -1,0 +1,50 @@
+﻿@model WebPizzaApp.Data.Rendeles
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Rendeles</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AllapotId" class="control-label"></label>
+                <select asp-for="AllapotId" class="form-control" asp-items="ViewBag.AllapotId"></select>
+                <span asp-validation-for="AllapotId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FutarId" class="control-label"></label>
+                <select asp-for="FutarId" class="form-control" asp-items="ViewBag.FutarId"></select>
+                <span asp-validation-for="FutarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CimId" class="control-label"></label>
+                <select asp-for="CimId" class="form-control" asp-items="ViewBag.CimId"></select>
+                <span asp-validation-for="CimId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PizzaRendelesek" class="control-label"></label>
+                <select asp-for="PizzaRendelesek" class="form-control" asp-items="ViewBag.PizzaId">
+                    <option value="">--Válassz pizzát--</option>
+                </select>
+                <span asp-validation-for="PizzaRendelesek" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -19,9 +19,19 @@ namespace WebPizzaApp.Controllers
         }
 
         // GET: Megrendelo
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Megrendelok.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var megrendelok = from m in _context.Megrendelok
+                              select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                megrendelok = megrendelok.Where(m => m.Nev.Contains(searchString));
+            }
+
+            return View(await megrendelok.ToListAsync());
         }
 
         // GET: Megrendelo/Details/5

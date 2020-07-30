@@ -20,6 +20,7 @@ namespace WebPizzaApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             var webPizzaAppDbContext = _context.Rendelesek.Include(r => r.Allapot)
                 .Include(r => r.Futar)
                 .Include(r => r.Cim)
@@ -27,26 +28,28 @@ namespace WebPizzaApp.Controllers
                 .Include(r => r.PizzaRendelesek)
                 .ThenInclude(r => r.Pizza);
             return View(await webPizzaAppDbContext.ToListAsync());
+
         }
 
         // GET: Teszt/Create
-        public IActionResult CreateS1()
+        public IActionResult Create()
         {
+            PopulatePizzaDropDownList();
             return View();
         }
 
         // POST: Teszt/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int id)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 
                 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
             return RedirectToAction(nameof(Index));
         }
 
@@ -70,5 +73,14 @@ namespace WebPizzaApp.Controllers
         // - AllapotId=3 
 
         // TODO - A rendelések index-ben a kilistázásban be kell tenni egy szűrést, h a kész ne látszódjon
+
+        private void PopulatePizzaDropDownList(object selectedPizza = null)
+        {
+            var pizzakQuery = from p in _context.Pizzak
+                              orderby p.Nev
+                              select p;
+            ViewBag.PizzaId = new SelectList(pizzakQuery.AsNoTracking(), "PizzaId", "Nev", selectedPizza);
+        }
+
     }
 }
