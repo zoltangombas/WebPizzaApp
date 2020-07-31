@@ -1,0 +1,34 @@
+﻿@model WebPizzaApp.Data.Rendeles
+
+@{
+    ViewData["Title"] = "Kiszállítás";
+}
+
+
+<h3>Kiszállításhoz válassz futárt!</h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <form asp-action="Kiszallit">
+        <div class="form-group">
+            <label asp-for="RendelesId" class="control-label"></label>
+            <input asp-for="RendelesId" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="FutarId" class="control-label"></label>
+            <select asp-for="FutarId" class="form-control" asp-items="ViewBag.FutarId">
+                <option value="">--Válassz futárt--</option>
+            </select>
+            <span asp-validation-for="FutarId" class="text-danger"></span>
+        </div>
+
+        <input type="hidden" asp-for="RendelesId" />
+        <input type="submit" value="Kiszállít" class="btn btn-danger" /> |
+        <a asp-action="Index">Mégsem</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

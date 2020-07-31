@@ -20,6 +20,7 @@ namespace WebPizzaApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // TODO - A rendelések index-ben majd kilistázásban be kell tenni egy szűrést, h a kész ne látszódjon
 
             var webPizzaAppDbContext = _context.Rendelesek.Include(r => r.Allapot)
                 .Include(r => r.Futar)
@@ -35,7 +36,7 @@ namespace WebPizzaApp.Controllers
         public IActionResult Create()
         {
             ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam");
-
+            //PopulateCimDropDownList();
             PopulatePizzaDropDownList();
             return View();
         }
@@ -64,28 +65,113 @@ namespace WebPizzaApp.Controllers
             return View(rendeles);
         }
 
+        // GET: Rendeles/Addpizza
+        public async Task<IActionResult> Addpizza(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        // TODO - Új rendelés felvitel -> 
-        // 1.
-        // - rendelesId++ 
-        // - AllapotId=1 
-        // - pizzákat hozzáadni valahogy 
-        // - cimId =  a megrendelő szűkített címei alapján 
-        // - vissza a rendelésekhez, ekkor bekerül az aktuális rendelésekhez
-        //
-        // 2.
-        // rendelések listában statusz váltás gomb hatására ->
-        // - AllapotId=2 
-        // - FutarId beállít ->
-        // - vissza a rendelésekhez, ekkor módosul az aktuális rendelésekben
-        //
-        // 3.
-        // rendelések listában újra statusz váltás gomb hatására ->
-        // - AllapotId=3 
+            var rendeles = await _context.Rendelesek.FindAsync(id);
+            if (rendeles == null)
+            {
+                return NotFound();
+            }
+            ViewData["RendelesId"] = rendeles.RendelesId;
+            PopulatePizzaDropDownList();
 
-        // TODO - A rendelések index-ben a kilistázásban be kell tenni egy szűrést, h a kész ne látszódjon
+            return View(rendeles);
+        }
 
+        // TODO - Rendeles/Addpizza : pizza hozzáadása a meglévő rendeléshez
 
+        // POST: Rendeles/Addpizza
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Addpizza()
+        {
+           
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Rendeles/Kiszallit
+        public async Task<IActionResult> Kiszallit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var rendeles = await _context.Rendelesek.FindAsync(id);
+            if (rendeles == null)
+            {
+                return NotFound();
+            }
+            ViewData["RendelesId"] = rendeles.RendelesId;
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev");
+            return View(rendeles);
+        }
+
+        // TODO - Rendeles/Kiszallit : az AllapotId=2 ra változzon, Futar beállítása a rendeléshez
+
+        // POST: Rendeles/Kiszallit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Kiszallit()
+        {
+            
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Rendeles/Lezar
+        public async Task<IActionResult> Lezar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var rendeles = await _context.Rendelesek.FindAsync(id);
+            if (rendeles == null)
+            {
+                return NotFound();
+            }
+            ViewData["RendelesId"] = rendeles.RendelesId;
+            return View(rendeles);
+        }
+
+        // TODO - Rendeles/Lezar : az AllapotId=3 ra változzon
+
+        // POST: Rendeles/Lezar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Lezar()
+        {
+            
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Megrendelők lenyíló lista feltöltése
+        // TODO - CimId helyett a megrendelők neve és címei
+        private void PopulateCimDropDownList()
+        {
+            var cim = _context.Cimek
+                .Include(c => c.Megrendelo)
+                .Where(c => c.CimId == c.Megrendelo.MegrendeloId);
+
+            var cim2 = _context.Cimek.OrderBy(c => c.CimId);
+
+            ViewBag.MCimId = new SelectList(cim.AsNoTracking(), "CimId", "Irsz");
+        }
+
+        // Pizzák lenyíló lista feltöltése
         private void PopulatePizzaDropDownList(object selectedPizza = null)
         {
             var pizzakQuery = from p in _context.Pizzak
@@ -93,6 +179,5 @@ namespace WebPizzaApp.Controllers
                               select p;
             ViewBag.PizzaId = new SelectList(pizzakQuery.AsNoTracking(), "PizzaId", "Nev", selectedPizza);
         }
-
     }
 }

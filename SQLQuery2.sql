@@ -1,0 +1,1 @@
+﻿select CimID, M.Nev + ' ' + Irsz + ' ' + Varos + ' ' + Utca + ' ' + Hazszam + ' csengő: ' + Csengo AS Fullcim from Cimek AS C JOIN  Megrendelok AS M ON C.MegrendeloId = M.MegrendeloId ORDER BY 2

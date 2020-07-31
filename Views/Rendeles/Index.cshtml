@@ -68,7 +68,9 @@
                     </table>
                 </td>
                 <td>
-                    <a asp-action="Index" asp-route-id="@item.CimId">Státusz váltás</a>
+                    <a asp-action="Addpizza" asp-route-id="@item.RendelesId">+Pizza</a> |
+                    <a asp-action="Kiszallit" asp-route-id="@item.RendelesId">Kiszállítás</a> |
+                    <a asp-action="Lezar" asp-route-id="@item.RendelesId">Lezárás</a>
                 </td>
             </tr>
         }
