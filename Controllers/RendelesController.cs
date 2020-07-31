@@ -65,58 +65,18 @@ namespace WebPizzaApp.Controllers
         }
 
         // GET: Rendeles/Addpizza
-        public async Task<IActionResult> Addpizza(int? id)
+        public async Task<IActionResult> Addpizza()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var rendeles = await _context.Rendelesek.FindAsync(id);
-            if (rendeles == null)
-            {
-                return NotFound();
-            }
-            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            PopulateCimDropDownList();
-            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
-            return View(rendeles);
+            return View();
         }
 
         // POST: Rendeles/Addpizza
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Addpizza(int id, [Bind("RendelesId,AllapotId,FutarId,CimId")] Rendeles rendeles)
+        public async Task<IActionResult> Addpizza(int id)
         {
-            if (id != rendeles.RendelesId)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(rendeles);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RendelesExists(rendeles.RendelesId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            PopulateCimDropDownList();
-            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
-            return View(rendeles);
+            return View();
         }
 
         // GET: Rendeles/Kiszallit

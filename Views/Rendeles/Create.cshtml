@@ -15,7 +15,8 @@
             <div class="form-group">
                 <label asp-for="CimId" class="control-label"></label>
                 <select asp-for="CimId" class="form-control" asp-items="ViewBag.CimId">
-                    <option value="">--Válassz megrendelőt--</option></select>
+                    <option value="">--Válassz megrendelőt--</option>
+                </select>
                 <span asp-validation-for="CimId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -25,11 +26,13 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Rendelés" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+
 
 <div>
     <a asp-action="Index">Vissza</a>
