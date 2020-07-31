@@ -35,8 +35,7 @@ namespace WebPizzaApp.Controllers
         // GET: Rendeles/Create
         public IActionResult Create()
         {
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam");
-            //PopulateCimDropDownList();
+            PopulateCimDropDownList();
             PopulatePizzaDropDownList();
             return View();
         }
@@ -79,12 +78,10 @@ namespace WebPizzaApp.Controllers
                 return NotFound();
             }
             ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            PopulateCimDropDownList();
             ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
-
-        // TODO - Rendeles/Addpizza : pizza hozzáadása a meglévő rendeléshez
 
         // POST: Rendeles/Addpizza
         [HttpPost]
@@ -117,7 +114,7 @@ namespace WebPizzaApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            PopulateCimDropDownList();
             ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
@@ -136,12 +133,10 @@ namespace WebPizzaApp.Controllers
                 return NotFound();
             }
             ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            PopulateCimDropDownList();
             ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
-
-        // TODO - Rendeles/Kiszallit : az AllapotId=2 ra változzon, Futar beállítása a rendeléshez
 
         // POST: Rendeles/Kiszallit
         [HttpPost]
@@ -157,7 +152,7 @@ namespace WebPizzaApp.Controllers
             {
                 ModelState.AddModelError("Error", "A rendelés nem szállítható ki, mert már kiszállítás alatt áll! ");
                 ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-                ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+                PopulateCimDropDownList();
                 ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
                 return View(rendeles);
             }
@@ -184,7 +179,7 @@ namespace WebPizzaApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            PopulateCimDropDownList();
             ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
@@ -203,12 +198,10 @@ namespace WebPizzaApp.Controllers
                 return NotFound();
             }
             ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            PopulateCimDropDownList();
             ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
-
-        // TODO - Rendeles/Lezar : az AllapotId=3 ra változzon
 
         // POST: Rendeles/Lezar
         [HttpPost]
@@ -224,7 +217,7 @@ namespace WebPizzaApp.Controllers
             {
                 ModelState.AddModelError("Error", "A rendelés nem zárható le, a pizza nincsen kiszállítva! ");
                 ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-                ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+                PopulateCimDropDownList();
                 ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
                 return View(rendeles);
             }
@@ -251,22 +244,15 @@ namespace WebPizzaApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
-            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            PopulateCimDropDownList();
             ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
 
         // Megrendelők lenyíló lista feltöltése
-        // TODO - CimId helyett a megrendelők neve és címei
         private void PopulateCimDropDownList()
         {
-            var cim = _context.Cimek
-                .Include(c => c.Megrendelo)
-                .Where(c => c.CimId == c.Megrendelo.MegrendeloId);
-
-            var cim2 = _context.Cimek.OrderBy(c => c.CimId);
-
-            ViewBag.MCimId = new SelectList(cim.AsNoTracking(), "CimId", "Irsz");
+            ViewBag.CimId = GetMegrendelok();
         }
 
         // Pizzák lenyíló lista feltöltése
@@ -278,10 +264,26 @@ namespace WebPizzaApp.Controllers
             ViewBag.PizzaId = new SelectList(pizzakQuery.AsNoTracking(), "PizzaId", "Nev", selectedPizza);
         }
 
+        // Létezik e a rendelés
         private bool RendelesExists(int id)
         {
             return _context.Rendelesek.Any(e => e.RendelesId == id);
         }
 
+        // Megrendelők címekkel lenyíló lista feltöltése
+        public IEnumerable<SelectListItem> GetMegrendelok()
+        {
+            List<SelectListItem> megrendelok = _context.Cimek
+                .Include(c => c.Megrendelo)
+                .AsNoTracking()
+                .Select(c =>
+                    new SelectListItem
+                    {
+                        Value = c.CimId.ToString(),
+                        Text = c.Megrendelo.Nev + ' ' + c.Irsz + ' ' + c.Varos + ' ' + c.Utca + ' ' + c.Hazszam
+                    }).ToList();
+                       
+            return new SelectList(megrendelok, "Value", "Text");
+        }
     }
 }
