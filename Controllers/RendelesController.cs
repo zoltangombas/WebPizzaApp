@@ -31,26 +31,37 @@ namespace WebPizzaApp.Controllers
 
         }
 
-        // GET: Teszt/Create
+        // GET: Rendeles/Create
         public IActionResult Create()
         {
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam");
+
             PopulatePizzaDropDownList();
             return View();
         }
 
-        // POST: Teszt/Create
+        // POST: Rendeles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id)
+        public async Task<IActionResult> Create([Bind("CimId,selectedPizza")] Rendeles rendeles, int SelectedPizza)
         {
-            //if (ModelState.IsValid)
-            //{
-                
-                
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                rendeles.AllapotId = 1;
+                _context.Add(rendeles);
+                await _context.SaveChangesAsync();
+
+                PizzaRendeles pr = new PizzaRendeles
+                {
+                    PizzaId = SelectedPizza,
+                    RendelesId = rendeles.RendelesId
+                };
+                _context.Add(pr);
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(rendeles);
         }
 
 
@@ -73,6 +84,7 @@ namespace WebPizzaApp.Controllers
         // - AllapotId=3 
 
         // TODO - A rendelések index-ben a kilistázásban be kell tenni egy szűrést, h a kész ne látszódjon
+
 
         private void PopulatePizzaDropDownList(object selectedPizza = null)
         {
