@@ -78,9 +78,9 @@ namespace WebPizzaApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["RendelesId"] = rendeles.RendelesId;
-            PopulatePizzaDropDownList();
-
+            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
 
@@ -89,12 +89,37 @@ namespace WebPizzaApp.Controllers
         // POST: Rendeles/Addpizza
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Addpizza()
+        public async Task<IActionResult> Addpizza(int id, [Bind("RendelesId,AllapotId,FutarId,CimId")] Rendeles rendeles)
         {
-           
+            if (id != rendeles.RendelesId)
+            {
+                return NotFound();
+            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(rendeles);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RendelesExists(rendeles.RendelesId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
+            return View(rendeles);
         }
 
         // GET: Rendeles/Kiszallit
@@ -110,8 +135,9 @@ namespace WebPizzaApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["RendelesId"] = rendeles.RendelesId;
-            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev");
+            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
 
@@ -120,12 +146,47 @@ namespace WebPizzaApp.Controllers
         // POST: Rendeles/Kiszallit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Kiszallit()
+        public async Task<IActionResult> Kiszallit(int id, [Bind("RendelesId,AllapotId,FutarId,CimId")] Rendeles rendeles)
         {
-            
+            if (id != rendeles.RendelesId)
+            {
+                return NotFound();
+            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (rendeles.AllapotId != 1)
+            {
+                ModelState.AddModelError("Error", "A rendelés nem szállítható ki, mert már kiszállítás alatt áll! ");
+                ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+                ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+                ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
+                return View(rendeles);
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    rendeles.AllapotId = 2;
+                    _context.Update(rendeles);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RendelesExists(rendeles.RendelesId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
+            return View(rendeles);
         }
 
         // GET: Rendeles/Lezar
@@ -141,7 +202,9 @@ namespace WebPizzaApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["RendelesId"] = rendeles.RendelesId;
+            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
             return View(rendeles);
         }
 
@@ -150,12 +213,47 @@ namespace WebPizzaApp.Controllers
         // POST: Rendeles/Lezar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Lezar()
+        public async Task<IActionResult> Lezar(int id, [Bind("RendelesId,AllapotId,FutarId,CimId")] Rendeles rendeles)
         {
-            
+            if (id != rendeles.RendelesId)
+            {
+                return NotFound();
+            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (rendeles.AllapotId != 2)
+            {
+                ModelState.AddModelError("Error", "A rendelés nem zárható le, a pizza nincsen kiszállítva! ");
+                ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+                ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+                ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
+                return View(rendeles);
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    rendeles.AllapotId = 3;
+                    _context.Update(rendeles);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RendelesExists(rendeles.RendelesId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
+            ViewData["CimId"] = new SelectList(_context.Cimek, "CimId", "Hazszam", rendeles.CimId);
+            ViewData["FutarId"] = new SelectList(_context.Futarok, "FutarId", "Nev", rendeles.FutarId);
+            return View(rendeles);
         }
 
         // Megrendelők lenyíló lista feltöltése
@@ -179,5 +277,11 @@ namespace WebPizzaApp.Controllers
                               select p;
             ViewBag.PizzaId = new SelectList(pizzakQuery.AsNoTracking(), "PizzaId", "Nev", selectedPizza);
         }
+
+        private bool RendelesExists(int id)
+        {
+            return _context.Rendelesek.Any(e => e.RendelesId == id);
+        }
+
     }
 }

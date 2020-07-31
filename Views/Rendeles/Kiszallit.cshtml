@@ -4,29 +4,50 @@
     ViewData["Title"] = "Kiszállítás";
 }
 
+<h1>Kiszállítás</h1>
 
-<h3>Kiszállításhoz válassz futárt!</h3>
+<h4>Rendelés</h4>
+
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"].Errors.Count > 0)
+{
+    <div class="alert-danger">
+        @ViewData.ModelState["Error"].Errors.First().ErrorMessage
+    </div>
+}
+
 <hr />
-
 <div class="row">
-    <div class="col-md-4"></div>
-    <form asp-action="Kiszallit">
-        <div class="form-group">
-            <label asp-for="RendelesId" class="control-label"></label>
-            <input asp-for="RendelesId" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label asp-for="FutarId" class="control-label"></label>
-            <select asp-for="FutarId" class="form-control" asp-items="ViewBag.FutarId">
-                <option value="">--Válassz futárt--</option>
-            </select>
-            <span asp-validation-for="FutarId" class="text-danger"></span>
-        </div>
+    <div class="col-md-4">
+        <form asp-action="Kiszallit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RendelesId" />
 
-        <input type="hidden" asp-for="RendelesId" />
-        <input type="submit" value="Kiszállít" class="btn btn-danger" /> |
-        <a asp-action="Index">Mégsem</a>
-    </form>
+            <div class="form-group">
+                <label asp-for="AllapotId" class="control-label"></label>
+                <select asp-for="AllapotId" class="form-control" asp-items="ViewBag.AllapotId" disabled></select>
+                <span asp-validation-for="AllapotId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FutarId" class="control-label"></label>
+                <select asp-for="FutarId" class="form-control" asp-items="ViewBag.FutarId"></select>
+                <span asp-validation-for="FutarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CimId" class="control-label"></label>
+                <select asp-for="CimId" class="form-control" asp-items="ViewBag.CimId" disabled></select>
+                <span asp-validation-for="CimId" class="text-danger"></span>
+            </div>
+            <select asp-for="AllapotId" class="h" asp-items="ViewBag.AllapotId" hidden></select>
+            <select asp-for="CimId" class="hide" asp-items="ViewBag.CimId" hidden></select>
+            <div class="form-group">
+                <input type="submit" value="Kiszállít" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Vissza</a>
 </div>
 
 @section Scripts {

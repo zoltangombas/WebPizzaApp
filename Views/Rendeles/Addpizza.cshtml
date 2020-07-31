@@ -1,30 +1,44 @@
 ﻿@model WebPizzaApp.Data.Rendeles
 
 @{
-    ViewData["Title"] = "Plusz pizza a rendeléshez";
+    ViewData["Title"] = "+ Pizza";
 }
 
+<h1>+ Pizza</h1>
 
-<h3>Adj pizzát a rendeléshez!</h3>
+<h4>Rendelés</h4>
 <hr />
-
 <div class="row">
-    <div class="col-md-4"></div>
-    <form asp-action="Addpizza">
-        <div class="form-group">
-            <label asp-for="RendelesId" class="control-label"></label>
-            <input asp-for="RendelesId" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label Value="Pizza" class="control-label"></label>
-            <select name="selectedPizza" class="form-control" asp-items="ViewBag.PizzaId">
-                <option value="">--Válassz pizzát--</option>
-            </select>
-        </div>
-        <input type="hidden" asp-for="RendelesId" />
-        <input type="submit" value="+ Pizza" class="btn btn-primary" /> |
-        <a asp-action="Index">Mégsem</a>
-    </form>
+    <div class="col-md-4">
+        <form asp-action="Addpizza">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RendelesId" />
+
+            <div class="form-group">
+                <label asp-for="AllapotId" class="control-label"></label>
+                <select asp-for="AllapotId" class="form-control" asp-items="ViewBag.AllapotId"></select>
+                <span asp-validation-for="AllapotId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FutarId" class="control-label"></label>
+                <select asp-for="FutarId" class="form-control" asp-items="ViewBag.FutarId"></select>
+                <span asp-validation-for="FutarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CimId" class="control-label"></label>
+                <select asp-for="CimId" class="form-control" asp-items="ViewBag.CimId"></select>
+                <span asp-validation-for="CimId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Hozzáad" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Vissza</a>
 </div>
 
 @section Scripts {
