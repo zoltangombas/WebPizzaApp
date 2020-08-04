@@ -9,12 +9,15 @@ namespace WebPizzaApp.Data
 {
     public class PizzaRendeles
     {
-        public int PizzaId { get; set; }
-        public Pizza Pizza { get; set; }
+        [Key]
+        public int PizzaRendelesId { get; set; }
 
+        [DisplayName("Rendelés")]
         public int RendelesId { get; set; }
         public Rendeles Rendeles { get; set; }
 
-
+        [DisplayName("Pizza")]
+        public int PizzaId { get; set; }
+        public Pizza Pizza { get; set; }
     }
 }

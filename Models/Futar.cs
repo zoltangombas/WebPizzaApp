@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace WebPizzaApp.Data
 {
-	public class Pizza
+	public class Futar
 	{
-		public int PizzaId { get; set; }
+		public int FutarId { get; set; }
 
-		[Column(TypeName = "nvarchar(200)")]
+		[Column(TypeName = "nvarchar(100)")]
 		[Required]
-		[MaxLength(200)]
+		[StringLength(100)]
 		[DisplayName("Név")]
 		public string Nev { get; set; }
 
-		public virtual IList<PizzaRendeles> PizzaRendelesek { get; set; }
+		public ICollection<Rendeles> Rendelesek { get; set; }
 	}
 }

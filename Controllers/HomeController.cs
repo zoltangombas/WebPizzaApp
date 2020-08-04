@@ -24,7 +24,7 @@ namespace WebPizzaApp.Controllers
         }
 
         public IActionResult Privacy()
-        {
+        {           
             return View();
         }
 

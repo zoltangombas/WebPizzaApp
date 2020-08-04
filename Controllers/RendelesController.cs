@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,21 +22,22 @@ namespace WebPizzaApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // TODO - A rendelések index-ben majd kilistázásban be kell tenni egy szűrést, h a kész ne látszódjon
-
             var webPizzaAppDbContext = _context.Rendelesek.Include(r => r.Allapot)
                 .Include(r => r.Futar)
                 .Include(r => r.Cim)
                 .Include(r => r.Cim.Megrendelo)
                 .Include(r => r.PizzaRendelesek)
-                .ThenInclude(r => r.Pizza);
+                .ThenInclude(r => r.Pizza)
+                .Where(r => r.AllapotId < 3);
             return View(await webPizzaAppDbContext.ToListAsync());
-
         }
 
         // GET: Rendeles/Create
         public IActionResult Create()
         {
+            // create session for pizzaid-k
+            HttpContext.Session.SetString("pids", "");
+
             PopulateCimDropDownList();
             PopulatePizzaDropDownList();
             return View();
@@ -43,42 +46,53 @@ namespace WebPizzaApp.Controllers
         // POST: Rendeles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CimId,selectedPizza")] Rendeles rendeles, int SelectedPizza)
+        public async Task<IActionResult> Create([Bind("CimId")] Rendeles rendeles)
         {
+            if (rendeles.CimId == null)
+            {
+                ModelState.AddModelError("Error", "A rendeléshez szükséges a megrendelő címe! ");
+                PopulateCimDropDownList();
+                PopulatePizzaDropDownList();
+                return View(rendeles);
+            }
+
+            // pizzak osszeszedese
+            var pizzakSessionbol = HttpContext.Session.GetString("pids");
+            string[] pizzak = pizzakSessionbol.Split(' ');
+            pizzak = pizzak.Take(pizzak.Count() - 1).ToArray();
+
+            if (pizzak.Length == 0)
+            {
+                ModelState.AddModelError("Error", "A rendeléshez szükséges legalább egy pizzát hozzáadni! ");
+                PopulateCimDropDownList();
+                PopulatePizzaDropDownList();
+                return View(rendeles);
+            }
+
             if (ModelState.IsValid)
             {
+                // uj rendeles
                 rendeles.AllapotId = 1;
                 _context.Add(rendeles);
                 await _context.SaveChangesAsync();
 
-                PizzaRendeles pr = new PizzaRendeles
+                // pizzak hozzaad
+                foreach (var p in pizzak)
                 {
-                    PizzaId = SelectedPizza,
-                    RendelesId = rendeles.RendelesId
-                };
-                _context.Add(pr);
+                    PizzaRendeles pr = new PizzaRendeles
+                    {
+                        PizzaId = int.Parse(p),
+                        RendelesId = rendeles.RendelesId
+                    };
+                    _context.Add(pr);
+                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(rendeles);
         }
-
-        // GET: Rendeles/Addpizza
-        public async Task<IActionResult> Addpizza()
-        {
-            return View();
-        }
-
-        // POST: Rendeles/Addpizza
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Addpizza(int id)
-        {
-
-            return View();
-        }
-
+        
         // GET: Rendeles/Kiszallit
         public async Task<IActionResult> Kiszallit(int? id)
         {
@@ -173,7 +187,7 @@ namespace WebPizzaApp.Controllers
                 return NotFound();
             }
 
-            if (rendeles.AllapotId != 2)
+            if (rendeles.AllapotId == 1)
             {
                 ModelState.AddModelError("Error", "A rendelés nem zárható le, a pizza nincsen kiszállítva! ");
                 ViewData["AllapotId"] = new SelectList(_context.Allapotok, "AllapotId", "Megnevezes", rendeles.AllapotId);
@@ -242,8 +256,16 @@ namespace WebPizzaApp.Controllers
                         Value = c.CimId.ToString(),
                         Text = c.Megrendelo.Nev + ' ' + c.Irsz + ' ' + c.Varos + ' ' + c.Utca + ' ' + c.Hazszam
                     }).ToList();
-                       
+
             return new SelectList(megrendelok, "Value", "Text");
+        }
+
+        // Megrendelt pizzak a create formrol
+        [HttpPost]
+        public JsonResult MyajaxCall(string order)
+        {
+            HttpContext.Session.SetString("pids", order);
+            return Json("ok");
         }
     }
 }

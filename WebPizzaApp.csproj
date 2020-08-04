@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\" />
+    <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
 
 </Project>

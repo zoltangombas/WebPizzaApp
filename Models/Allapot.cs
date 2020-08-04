@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 
 namespace WebPizzaApp.Data
 {
-	public class Megrendelo
+	public class Allapot
 	{
-		public int MegrendeloId { get; set; }
+		public int AllapotId { get; set; }
 
-		[Column(TypeName = "nvarchar(200)")]
+		[Column(TypeName = "nvarchar(50)")]
 		[Required]
-		[MaxLength(200)]
-		[DisplayName("Név")]
-		public string Nev { get; set; }
+		[StringLength(50)]
+		[DisplayName("Állapot")]
+		public string Megnevezes { get; set; }
 
-		public ICollection<Cim> Cimek { get; set; }
+		public ICollection<Rendeles> Rendelesek { get; set; }
 	}
+
 }

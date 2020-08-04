@@ -7,6 +7,14 @@
 <h1>Create</h1>
 
 <h4>Rendeles</h4>
+
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"].Errors.Count > 0)
+{
+    <div class="alert-danger">
+        @ViewData.ModelState["Error"].Errors.First().ErrorMessage
+    </div>
+}
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,22 +23,29 @@
             <div class="form-group">
                 <label asp-for="CimId" class="control-label"></label>
                 <select asp-for="CimId" class="form-control" asp-items="ViewBag.CimId">
-                    <option value="">--Válassz megrendelőt--</option>
+                    <option value="" selected disabled>--Válassz megrendelőt--</option>
                 </select>
                 <span asp-validation-for="CimId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label Value="Pizza" class="control-label"></label>
-                <select name="selectedPizza" class="form-control" asp-items="ViewBag.PizzaId">
-                    <option value="">--Válassz pizzát--</option>
+                <select name="selectedPizza" id="selectedPizza" class="form-control" asp-items="ViewBag.PizzaId">
+                    <option value="" selected disabled>--Válassz pizzát--</option>
                 </select>
             </div>
+            <div>
+                <input type="button" value="Add pizza" id="btnPizza" class="btn btn-primary" onclick="pushData();" />
+            </div>
+            <hr />
             <div class="form-group">
                 <input type="submit" value="Rendelés" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+<hr />
+<h4>Rendelt pizzák:</h4>
+<p id="pText"></p>
 
 
 
@@ -40,4 +55,44 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        var IdArr = "";
+        var TextArr = [];
+
+        function pushData() {
+            var e = document.getElementById("selectedPizza");
+            var selectedPizzaText = e.options[e.selectedIndex].text;
+            var selectedPizzaId = e.options[e.selectedIndex].value;
+
+            document.getElementById("selectedPizza").selectedIndex = 0;
+
+            if (selectedPizzaText != "--Válassz pizzát--") {
+
+                //Text
+                TextArr.push(selectedPizzaText);
+                var pizzaTextValue = "";
+                for (i = 0; i < TextArr.length; i++) {
+                    pizzaTextValue = pizzaTextValue + TextArr[i] + "<br/>";
+                }
+                document.getElementById('pText').innerHTML = pizzaTextValue;
+
+                //Id
+                IdArr += selectedPizzaId + " ";
+
+                //Id back to controller
+                $.ajax({
+                    url: '/Rendeles/MyajaxCall',
+                    type: 'Post',
+                    dataType: 'json',
+                    data: { order: IdArr },
+                    success: function (data) {
+
+                    }, error: function (data) {
+
+                    }
+                });
+            }
+        };
+    </script>
 }

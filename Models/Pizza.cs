@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebPizzaApp.Data
 {
-	public class Rendeles
+	public class Pizza
 	{
-		public int RendelesId { get; set; }
+		public int PizzaId { get; set; }
 
-		public int AllapotId { get; set; }
-		public Allapot Allapot { get; set; }
-
-		public int? FutarId { get; set; }
-		public Futar Futar { get; set; }
-
-		public int? CimId { get; set; }
-		public Cim Cim { get; set; }
+		[Column(TypeName = "nvarchar(100)")]
+		[Required]
+		[StringLength(100)]
+		[DisplayName("Név")]
+		public string Nev { get; set; }
 
 		public virtual IList<PizzaRendeles> PizzaRendelesek { get; set; }
 	}

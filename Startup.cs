@@ -29,7 +29,8 @@ namespace WebPizzaApp
             );
 
             services.AddControllersWithViews();
-
+            // add session
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +45,9 @@ namespace WebPizzaApp
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+
+            //enable session before MVC
+            app.UseSession();
 
             app.UseRouting();
 
