@@ -20,16 +20,37 @@ namespace WebPizzaApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // GET: Rendeles/Index
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
+            
+            ViewData["CurrentSort"] = sortOrder;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             var webPizzaAppDbContext = _context.Rendelesek.Include(r => r.Allapot)
                 .Include(r => r.Futar)
                 .Include(r => r.Cim)
                 .Include(r => r.Cim.Megrendelo)
                 .Include(r => r.PizzaRendelesek)
                 .ThenInclude(r => r.Pizza)
-                .Where(r => r.AllapotId < 3);
-            return View(await webPizzaAppDbContext.ToListAsync());
+                .Where(r => r.AllapotId < 3)
+                .OrderByDescending(r => r.RendelesId);
+
+
+            int pageSize = 4;
+            return View(await PaginatedList<Rendeles>.CreateAsync(webPizzaAppDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Rendeles/Create
@@ -92,7 +113,7 @@ namespace WebPizzaApp.Controllers
             }
             return View(rendeles);
         }
-        
+
         // GET: Rendeles/Kiszallit
         public async Task<IActionResult> Kiszallit(int? id)
         {
